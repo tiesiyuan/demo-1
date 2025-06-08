@@ -233,24 +233,65 @@
         }
         
         .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
             margin: 40px 0;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
         }
         
         .feature-card {
-            background: rgba(255, 255, 255, 0.08);
-            padding: 25px;
-            border-radius: 12px;
-            text-align: center;
+            flex: 1;
+            min-width: 0;
+            perspective: 1000px;
+            cursor: pointer;
+            position: relative;
+            height: 350px;
             transition: all 0.3s ease;
         }
         
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            padding: 25px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: transform 0.6s ease-in-out;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-front {
+            transform: rotateY(0deg);
+        }
+        
+        .card-back {
+            background: rgba(26, 188, 156, 0.2);
+            transform: rotateY(180deg);
+            overflow-y: auto;
+        }
+        
+        .feature-card.flipped .card-front {
+            transform: rotateY(-180deg);
+        }
+        
+        .feature-card.flipped .card-back {
+            transform: rotateY(0deg);
+        }
+        
         .feature-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.12);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
         }
         
         .feature-card i {
@@ -262,6 +303,41 @@
         .feature-card h3 {
             margin-bottom: 15px;
             font-size: 1.4rem;
+            color: var(--accent);
+        }
+        
+        .feature-card p {
+            color: #bdc3c7;
+            line-height: 1.6;
+        }
+        
+        .pile-types {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+            text-align: left;
+            width: 100%;
+        }
+        
+        .pile-types div {
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .card-back ul {
+            text-align: left;
+            padding-left: 20px;
+            margin: 15px 0;
+            width: 100%;
+        }
+        
+        .card-back ul li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+            font-size: 0.9rem;
         }
         
         .loading {
@@ -283,6 +359,18 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 900px) {
+            .features {
+                flex-direction: column;
+            }
+            
+            .feature-card {
+                width: 100%;
+                height: auto;
+                min-height: 300px;
+            }
         }
     </style>
 </head>
@@ -337,22 +425,69 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="features">
-            <div class="feature-card">
-                <i class="fas fa-brain"></i>
-                <h3>深度学习算法</h3>
-                <p>采用先进的卷积神经网络(CNN)模型，识别准确率高达95%以上</p>
+            <!-- 卡片1 - 深度学习算法 -->
+            <div class="feature-card" onclick="this.classList.toggle('flipped')">
+                <div class="card-face card-front">
+                    <i class="fas fa-brain"></i>
+                    <h3>深度学习算法</h3>
+                    <p>采用先进的卷积神经网络(CNN)模型，识别准确率高达95%以上</p>
+                </div>
+                <div class="card-face card-back">
+                    <h3><i class="fas fa-project-diagram"></i> CNN原理</h3>
+                    <ul>
+                        <li>输入层接收640x480像素的桩基图像</li>
+                        <li>3层卷积核（32/64/128）提取特征</li>
+                        <li>ReLU激活函数增强非线性</li>
+                        <li>最大池化层压缩特征维度</li>
+                        <li>全连接层输出12种桩基概率</li>
+                    </ul>
+                </div>
             </div>
-            <div class="feature-card">
-                <i class="fas fa-bolt"></i>
-                <h3>快速识别</h3>
-                <p>单张图片识别时间小于3秒，支持批量处理</p>
+
+            <!-- 卡片2 - 快速识别 -->
+            <div class="feature-card" onclick="this.classList.toggle('flipped')">
+                <div class="card-face card-front">
+                    <i class="fas fa-bolt"></i>
+                    <h3>快速识别</h3>
+                    <p>单张图片识别时间小于3秒，支持批量处理</p>
+                </div>
+                <div class="card-face card-back">
+                    <h3><i class="fas fa-tachometer-alt"></i> 加速技术</h3>
+                    <ul>
+                        <li>基于TensorRT的模型量化（FP16精度）</li>
+                        <li>GPU并行计算（CUDA加速）</li>
+                        <li>动态批处理技术</li>
+                        <li>内存复用优化</li>
+                    </ul>
+                </div>
             </div>
-            <div class="feature-card">
-                <i class="fas fa-cogs"></i>
-                <h3>专业分类</h3>
-                <p>支持摩擦桩、端承桩、嵌岩桩等12种桩基类型识别</p>
+
+            <!-- 卡片3 - 专业分类 -->
+            <div class="feature-card" onclick="this.classList.toggle('flipped')">
+                <div class="card-face card-front">
+                    <i class="fas fa-cogs"></i>
+                    <h3>专业分类</h3>
+                    <p>支持摩擦桩、端承桩、嵌岩桩等12种桩基类型识别</p>
+                </div>
+                <div class="card-face card-back">
+                    <h3><i class="fas fa-list-ol"></i> 12种桩基类型</h3>
+                    <div class="pile-types">
+                        <div>1. 摩擦桩</div>
+                        <div>2. 端承桩</div>
+                        <div>3. 嵌岩桩</div>
+                        <div>4. 扩底桩</div>
+                        <div>5. 钢管桩</div>
+                        <div>6. 预制混凝土桩</div>
+                        <div>7. 灌注桩</div>
+                        <div>8. 微型桩</div>
+                        <div>9. 钻孔桩</div>
+                        <div>10. 旋喷桩</div>
+                        <div>11. 搅拌桩</div>
+                        <div>12. 管桩</div>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -518,6 +653,15 @@
             
             // 显示示例结果
             setTimeout(showResults, 1000);
+        });
+        
+        // 点击卡片外部时关闭
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.feature-card')) {
+                document.querySelectorAll('.feature-card.flipped').forEach(card => {
+                    card.classList.remove('flipped');
+                });
+            }
         });
     </script>
 </body>
